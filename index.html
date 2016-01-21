@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="bower_components/react/react.js"></script>
+        <script src="bower_components/react/react-dom.js"></script>
+        <script src="bower_components/babel/browser.js"></script>
+        <script src="bower_components/moment/min/moment.min.js"></script>
+
+        <script src="config.js"></script>
+
+        <meta charset="utf-8">
+        <title>Toggl App</title>
+
+        <script type="text/babel">
+        var EntryForm = React.createClass({
+            handleSubmit: function(event) {
+                event.preventDefault();
+                var form = event.target;
+
+                var task = {
+                    name: form.querySelector("#task-name").value,
+                    project: form.querySelector("#task-project").value
+                }
+            },
+
+            render: function() {
+                return <form onSubmit={this.handleSubmit}>
+                    <div className="form-control">
+                        <label htmlFor="task-name">Task name</label>
+                        <input type="text" name="taskName" id="task-name" placeholder="Task name" />
+                    </div>
+
+                    <div className="form-control">
+                        <label htmlFor="task-project">Project</label>
+                        <select id="task-project" name="taskProject">
+                            <option value="">Project</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" id="task-start">start</button>
+                </form>
+            }
+        });
+
+        var EntriesList = React.createClass({
+            render: function() {
+                var createEntry = function(entry) {
+                    return <li key={entry.id}>
+                            {entry.description}
+                        </li>
+                }
+                return <ul>{this.props.entries.map(createEntry)}</ul>
+            }
+        });
+
+        var RecentEntries = React.createClass({
+            getInitialState: function() {
+                return {
+                    entries: []
+                };
+            },
+
+            componentDidMount: function() {
+                var request = new XMLHttpRequest();
+                request.open("GET", this.props.source, true);
+                request.setRequestHeader("Authorization", "Basic " + btoa(app.config.api.token + ":api_token"));
+
+                request.onload = (function() {
+                    if (request.status == 200 && request.status < 400) {
+                        var result = JSON.parse(request.responseText);
+
+                        if (this.isMounted()) {
+                            this.setState({entries: result});
+                        }
+                    } else {
+                        console.log("Server error");
+                    }
+                }).bind(this);
+
+                request.send();
+            },
+
+            render: function() {
+                return (
+                    <div>
+                        <h3>Toggl App</h3>
+                        <EntriesList entries={this.state.entries} />
+                    </div>
+                );
+            }
+        });
+
+        ReactDOM.render(
+            <div>
+                <EntryForm />
+                <RecentEntries source="https://www.toggl.com/api/v8/time_entries" />
+            </div>,
+            document.getElementById("app")
+        );
+        </script>
+    </head>
+    <body>
+
+        <div id="app">
+
+        </div>
+
+    </body>
+</html>

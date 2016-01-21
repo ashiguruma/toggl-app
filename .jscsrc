@@ -1,0 +1,17 @@
+{
+    "preset": "airbnb",
+
+    "excludeFiles": [
+        "bower_components/**"
+    ],
+
+    "validateIndentation": 4,
+    "validateQuoteMarks": "\"",
+    "safeContextKeyword": "that",
+    "requireDollarBeforejQueryAssignment": "ignoreProperties",
+    "requirePaddingNewLinesAfterBlocks": {
+        "allExcept": ["inCallExpressions", "inNewExpressions", "inArrayExpressions", "inProperties"]
+    },
+    "disallowQuotedKeysInObjects": null,
+    "requireTrailingComma": null
+}
