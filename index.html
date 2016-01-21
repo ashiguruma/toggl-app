@@ -7,6 +7,38 @@
         <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
         <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
 
+        <style>
+            html {
+                box-sizing: border-box;
+            }
+            *, *:before, *:after {
+                box-sizing: inherit;
+            }
+
+            #app {
+                margin: 40px;
+            }
+
+            #task-entry .container {
+                float: left;
+            }
+            #task-description-container {
+                width: 70%;
+            }
+            #task-description-container input {
+                width: 100%;
+            }
+            #task-project-container {
+                width: 20%
+            }
+            #task-project-container select {
+                width: 100%;
+            }
+            #task-start {
+                width: 10%;
+            }
+        </style>
+
         <script src="bower_components/react/react.js"></script>
         <script src="bower_components/react/react-dom.js"></script>
         <script src="bower_components/babel/browser.js"></script>
@@ -27,14 +59,14 @@
             },
 
             render: function() {
-                return <form onSubmit={this.handleSubmit}>
-                    <div className="form-control">
-                        <label htmlFor="task-name">Task name</label>
-                        <input type="text" name="taskName" id="task-name" placeholder="Task name" />
+                return <form id="task-entry" onSubmit={this.handleSubmit}>
+                    <div id="task-description-container" className="container">
+                        <label htmlFor="task-description" className="visuallyhidden focusable">Describe your task</label>
+                        <input type="text" name="taskName" id="task-description" placeholder="e.g. Writing, Bugfixing in IE" />
                     </div>
 
-                    <div className="form-control">
-                        <label htmlFor="task-project">Project</label>
+                    <div id="task-project-container" className="container">
+                        <label htmlFor="task-project" className="visuallyhidden focusable">Project</label>
                         <select id="task-project" name="taskProject">
                             <option value="">Project</option>
                         </select>
@@ -86,7 +118,7 @@
             render: function() {
                 return (
                     <div>
-                        <h3>Toggl App</h3>
+                        <h3>Previous Entries</h3>
                         <EntriesList entries={this.state.entries} />
                     </div>
                 );
