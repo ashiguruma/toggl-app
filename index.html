@@ -47,6 +47,35 @@
         <script src="config.js"></script>
 
         <script type="text/babel">
+        var ajax = function(options) {
+            var request = new XMLHttpRequest();
+            request.open("GET", options.url, true);
+
+            Object.keys(options.headers).forEach(function(header) {
+                request.setRequestHeader(header, options.headers[header]);
+            });
+
+            request.onload = function(event) {
+                if (request.status == 200 && request.status < 400) {
+                    var result = JSON.parse(request.responseText);
+
+                    if (typeof options.success === "function") {
+                        options.success(result, event);
+                    }
+                } else {
+                    options.error(event, request);
+                    console.error("There was a server error", request, event);
+                }
+            };
+
+            request.onerror = function(event) {
+                options.error(event, request);
+                console.error("There was an error with the request", request, event);
+            };
+
+            request.send();
+        }
+
         var EntryForm = React.createClass({
             handleSubmit: function(event) {
                 event.preventDefault();
@@ -65,15 +94,47 @@
                         <input type="text" name="taskName" id="task-description" placeholder="e.g. Writing, Bugfixing in IE" />
                     </div>
 
-                    <div id="task-project-container" className="container">
-                        <label htmlFor="task-project" className="visuallyhidden focusable">Project</label>
-                        <select id="task-project" name="taskProject">
-                            <option value="">Project</option>
-                        </select>
-                    </div>
+                    <Projects />
 
                     <button type="submit" id="task-start">start</button>
                 </form>
+            }
+        });
+
+        var Projects = React.createClass({
+            getInitialState: function() {
+                return {
+                    projects: []
+                };
+            },
+
+            componentDidMount: function() {
+                ajax({
+                    url: app.config.api.endpoint + "workspaces/" + workspaceID + "/projects",
+                    headers: {
+                        "Authorization": "Basic " + btoa(app.config.api.token + ":api_token")
+                    },
+                    success: (function(result) {
+                        if (this.isMounted()) {
+                            this.setState({projects: result});
+                        }
+                    }).bind(this)
+                });
+            },
+
+            render: function() {
+                var projectEntry = function(project) {
+                    return <option key={project.id} value={project.id}>{project.name}</option>
+                };
+
+                return <div id="task-project-container" className="container">
+                    <label htmlFor="task-project" className="visuallyhidden focusable">Project</label>
+                    <select id="task-project" name="taskProject">
+                        <option>Select a project&hellip;</option>
+                        {this.state.projects.map(projectEntry)}
+                    </select>
+                </div>
+
             }
         });
 
@@ -96,26 +157,32 @@
             },
 
             componentDidMount: function() {
-                var request = new XMLHttpRequest();
-                request.open("GET", this.props.source, true);
-                request.setRequestHeader("Authorization", "Basic " + btoa(app.config.api.token + ":api_token"));
-
-                request.onload = (function() {
-                    if (request.status == 200 && request.status < 400) {
-                        var result = JSON.parse(request.responseText);
-
+                ajax({
+                    url: app.config.api.endpoint + "time_entries",
+                    headers: {
+                        "Authorization": "Basic " + btoa(app.config.api.token + ":api_token")
+                    },
+                    success: (function(result) {
                         if (this.isMounted()) {
                             this.setState({entries: result});
                         }
-                    } else {
-                        console.log("Server error");
-                    }
-                }).bind(this);
-
-                request.send();
+                    }).bind(this)
+                });
             },
 
             render: function() {
+                this.state.entries.sort(function(a, b) {
+                    var aDate = new Date(a.at);
+                    var bDate = new Date(b.at);
+
+                    if (aDate > bDate) {
+                        return -1
+                    } else if (aDate < bDate) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                });
                 return (
                     <div>
                         <h3>Previous Entries</h3>
