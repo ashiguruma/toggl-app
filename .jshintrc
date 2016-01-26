@@ -17,9 +17,7 @@
     "eqeqeq": true,
 
     "predef": [
-        "app",
-        "jQuery",
-        "$"
+        "app"
     ]
 
 }
