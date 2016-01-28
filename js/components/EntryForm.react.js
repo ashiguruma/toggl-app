@@ -8,22 +8,24 @@ var EntryForm = React.createClass({
     var form = event.target;
 
     var task = {
-      name: form.querySelector("#task-name").value,
-      project: form.querySelector("#task-project").value
-    }
+      name: form.querySelector('#task-name').value,
+      project: form.querySelector('#task-project').value
+    };
   },
 
   render: function() {
-    return <form id="task-entry" onSubmit={this.handleSubmit}>
-      <div id="task-description-container" className="container">
+    return (
+      <form id="task-entry" onSubmit={this.handleSubmit}>
+        <div id="task-description-container" className="container">
           <label htmlFor="task-description" className="visuallyhidden focusable">Describe your task</label>
           <input type="text" name="taskName" id="task-description" placeholder="e.g. Writing, Bugfixing in IE" />
-      </div>
+        </div>
 
-      <ProjectSelector />
+        <ProjectSelector />
 
-      <button type="submit" id="task-start">start</button>
-    </form>
+        <button type="submit" id="task-start">start</button>
+      </form>
+    );
   }
 });
 

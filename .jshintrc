@@ -11,13 +11,14 @@
   "noarg": true,
   "indent": 2,
   "trailing": true,
-  "quotmark": true,
   "newcap": true,
   "curly": true,
   "eqeqeq": true,
 
   "predef": [
-      "app"
+      "app",
+      "require",
+      "module"
   ]
 
 }

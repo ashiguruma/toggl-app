@@ -6,7 +6,6 @@
   ],
 
   "validateIndentation": 2,
-  "validateQuoteMarks": "'",
   "safeContextKeyword": "that",
   "requireDollarBeforejQueryAssignment": "ignoreProperties",
   "requirePaddingNewLinesAfterBlocks": {
