@@ -1,17 +1,17 @@
 {
-    "preset": "airbnb",
+  "preset": "airbnb",
 
-    "excludeFiles": [
-        "bower_components/**"
-    ],
+  "excludeFiles": [
+    "node_modules/**"
+  ],
 
-    "validateIndentation": 4,
-    "validateQuoteMarks": "\"",
-    "safeContextKeyword": "that",
-    "requireDollarBeforejQueryAssignment": "ignoreProperties",
-    "requirePaddingNewLinesAfterBlocks": {
-        "allExcept": ["inCallExpressions", "inNewExpressions", "inArrayExpressions", "inProperties"]
-    },
-    "disallowQuotedKeysInObjects": null,
-    "requireTrailingComma": null
+  "validateIndentation": 2,
+  "validateQuoteMarks": "'",
+  "safeContextKeyword": "that",
+  "requireDollarBeforejQueryAssignment": "ignoreProperties",
+  "requirePaddingNewLinesAfterBlocks": {
+    "allExcept": ["inCallExpressions", "inNewExpressions", "inArrayExpressions", "inProperties"]
+  },
+  "disallowQuotedKeysInObjects": null,
+  "requireTrailingComma": null
 }

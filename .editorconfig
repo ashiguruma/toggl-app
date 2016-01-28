@@ -5,7 +5,7 @@ root = true
 
 # Coding style
 indent_style = space
-indent_size = 4
+indent_size = 2
 
 # Encoding and line endings
 end_of_line = lf
